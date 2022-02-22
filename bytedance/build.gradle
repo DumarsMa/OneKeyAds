@@ -35,3 +35,9 @@ dependencies {
     implementation 'com.pangle.cn:ads-sdk-pro:4.2.5.2'
     api project(":base")
 }
+
+apply from: '../publish.gradle'
+ext {
+    PUBLISH_GROUPID = "io.github.dumarsma"
+    PUBLISH_ARTIFACTID = "bytedanceads"
+}

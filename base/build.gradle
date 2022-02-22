@@ -2,7 +2,6 @@ plugins {
     id 'com.android.library'
     id 'kotlin-android'
 }
-
 android {
     compileSdk 31
 
@@ -33,4 +32,9 @@ android {
 
 dependencies {
     implementation 'androidx.core:core-ktx:1.7.0'
+}
+apply from: '../publish.gradle'
+ext {
+    PUBLISH_GROUPID = "io.github.dumarsma"
+    PUBLISH_ARTIFACTID = "baseads"
 }

@@ -35,3 +35,9 @@ dependencies {
     implementation project(":unity:sdk")
     api project(":base")
 }
+
+apply from: '../publish.gradle'
+ext {
+    PUBLISH_GROUPID = "io.github.dumarsma"
+    PUBLISH_ARTIFACTID = "unityads"
+}

@@ -1,0 +1,28 @@
+project.plugins.apply("maven-publish")
+
+project.afterEvaluate {
+    publishing {
+        repositories {
+            maven {
+                // change to point to your repo, e.g. http://my.org/repo
+                if (version.endsWith('SNAPSHOT')) {
+                    url = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+                } else {
+                    url = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+                }
+                credentials {
+                    username = userName
+                    password = passWord
+                }
+            }
+        }
+        publications {
+            debug(MavenPublication) {
+                groupId = PUBLISH_GROUPID
+                artifactId = PUBLISH_ARTIFACTID
+                version = version
+                from components.release
+            }
+        }
+    }
+}
