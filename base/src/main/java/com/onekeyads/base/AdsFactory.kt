@@ -7,7 +7,7 @@ import com.onekeyads.base.view.rewarded.IRewardedAds
 
 object AdsFactory: IAdsFactory {
 
-    private val adsFactoryImpl: IAdsFactory = Class.forName("com.wugou.ads.AdsFactoryImpl")
+    private val adsFactoryImpl: IAdsFactory = Class.forName("com.onekeyads.factory.AdsFactoryImpl")
         .newInstance() as IAdsFactory
 
     override fun setConfig(adsConfig: AdsConfig) {
