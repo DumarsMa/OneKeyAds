@@ -3,7 +3,12 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven {url 'https://developer.huawei.com/repo/'}
+        maven {
+            url 'https://developer.huawei.com/repo/'
+        }
+        maven {
+            url 'https://artifact.bytedance.com/repository/pangle'
+        }
     }
 }
 rootProject.name = "OneKeyAds"
@@ -11,3 +16,4 @@ include ':app'
 include ':base'
 include ':huawei'
 include ':unity'
+include ':bytedance'

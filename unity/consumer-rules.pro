@@ -1,0 +1,1 @@
+-keep class com.onekeyads.factory.AdsFactoryImpl
