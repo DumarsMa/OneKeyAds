@@ -1,1 +1,1 @@
--keep class com.onekeyads.factory.AdsFactoryImpl
+-keepnames class com.onekeyads.factory.AdsFactoryImpl
