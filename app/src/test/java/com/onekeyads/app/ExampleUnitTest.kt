@@ -1,4 +1,4 @@
-package com.onekey.ads
+package com.onekeyads.app
 
 import org.junit.Test
 

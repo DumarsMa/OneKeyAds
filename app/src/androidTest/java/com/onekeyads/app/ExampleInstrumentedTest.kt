@@ -1,4 +1,4 @@
-package com.onekey.ads
+package com.onekeyads.app
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
