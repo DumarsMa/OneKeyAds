@@ -43,5 +43,5 @@ dependencies {
 
 ext {
     PUBLISH_GROUPID = "io.github.dumarsma"
-    PUBLISH_ARTIFACTID = "OneWayAds"
+    PUBLISH_ARTIFACTID = "onwayads"
 }
