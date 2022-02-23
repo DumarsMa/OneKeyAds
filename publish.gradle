@@ -17,11 +17,15 @@ project.afterEvaluate {
             }
         }
         publications {
-            debug(MavenPublication) {
+            maven(MavenPublication) {
                 groupId = PUBLISH_GROUPID
                 artifactId = PUBLISH_ARTIFACTID
                 version = version
-                from components.release
+                if (project.hasProperty("PUBLISH_ARTIFACT")) {
+                    artifact PUBLISH_ARTIFACT
+                } else {
+                    from components.release
+                }
             }
         }
     }

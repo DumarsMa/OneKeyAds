@@ -1,2 +1,8 @@
 configurations.maybeCreate("default")
 artifacts.add("default", file("unity-ads.aar"))
+apply from: '../../publish.gradle'
+ext {
+    PUBLISH_GROUPID = "io.github.dumarsma"
+    PUBLISH_ARTIFACTID = "unityads-sdk"
+    PUBLISH_ARTIFACT = "$project.projectDir/unity-ads.aar"
+}

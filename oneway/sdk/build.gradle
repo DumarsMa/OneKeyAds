@@ -1,2 +1,8 @@
 configurations.maybeCreate("default")
 artifacts.add("default", file("Oneway-2.5.3-release.aar"))
+apply from: '../../publish.gradle'
+ext {
+    PUBLISH_GROUPID = "io.github.dumarsma"
+    PUBLISH_ARTIFACTID = "onewayads-sdk"
+    PUBLISH_ARTIFACT = "$project.projectDir/Oneway-2.5.3-release.aar"
+}
