@@ -1,4 +1,5 @@
 project.plugins.apply("maven-publish")
+project.plugins.apply("signing")
 
 project.afterEvaluate {
     publishing {
@@ -11,8 +12,10 @@ project.afterEvaluate {
                     url = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
                 }
                 credentials {
-                    username = userName
-                    password = passWord
+                    //sonatype 配置的用户名
+                    username = ossrhUsername
+                    //sonatype 配置的密码
+                    password = ossrhPassword
                 }
             }
         }
@@ -26,7 +29,35 @@ project.afterEvaluate {
                 } else {
                     from components.release
                 }
+                pom {
+                    name = 'OneKeyAds'
+                    description = '一键接入多渠道广告sdk'
+                    url = 'https://github.com/DumarsMa'
+                    licenses {
+                        license {
+                            name = 'The Apache License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = 'dumars'
+                            name = 'Dumars Ma'
+                        }
+                    }
+                    scm {
+                        connection = 'scm:git@github.com:DumarsMa/OneKeyAds.git'
+                        developerConnection = 'scm:git@github.com:DumarsMa/OneKeyAds.git'
+                        url = 'https://github.com/DumarsMa/OneKeyAds'
+                    }
+                }
             }
         }
+    }
+    //需要创建GPG密钥
+    //mac、ubuntu 参考https://www.jianshu.com/p/1c715203c7c6
+    //windows 参考 https://juejin.cn/post/6953598441817636900
+    signing {
+        sign publishing.publications.maven
     }
 }
