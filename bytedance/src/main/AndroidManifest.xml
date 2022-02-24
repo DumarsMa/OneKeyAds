@@ -8,7 +8,9 @@
 
     <uses-permission android:name="${applicationId}.openadsdk.permission.TT_PANGOLIN" />
 
-    <application>
+    <application
+        android:networkSecurityConfig="@xml/network_config"
+        android:requestLegacyExternalStorage="true">
         <provider
             android:name="com.bytedance.sdk.openadsdk.TTFileProvider"
             android:authorities="${applicationId}.TTFileProvider"
