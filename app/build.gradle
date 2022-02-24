@@ -31,21 +31,21 @@ android {
     }
     flavorDimensions "packageType"
     productFlavors {
-//        bytedance {
-//            dimension "packageType"
-//        }
-//        huawei {
-//            dimension "packageType"
-//        }
+        bytedance {
+            dimension "packageType"
+        }
+        huawei {
+            dimension "packageType"
+        }
         admob {
             dimension "packageType"
         }
-//        unity {
-//            dimension "packageType"
-//        }
-//        oneway {
-//            dimension "packageType"
-//        }
+        unity {
+            dimension "packageType"
+        }
+        oneway {
+            dimension "packageType"
+        }
     }
 }
 
@@ -58,9 +58,9 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-//    bytedanceImplementation project(":bytedance")
+    bytedanceImplementation project(":bytedance")
     admobImplementation project(":admob")
-//    huaweiImplementation project(":huawei")
-//    onewayImplementation project(":oneway")
-//    unityImplementation project(":unity")
+    huaweiImplementation project(":huawei")
+    onewayImplementation project(":oneway")
+    unityImplementation project(":unity")
 }
