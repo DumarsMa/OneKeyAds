@@ -11,7 +11,7 @@ private const val TAG = "BannerView"
 class BannerView: IBannerView {
 
     private var bannerAd: TTNativeExpressAd? = null
-    override fun attachToBanner(container: FrameLayout, config: String?, carousel: Boolean) {
+    override fun attachToBanner(container: FrameLayout, config: String, carousel: Boolean) {
         AdsFactory.init(container.context) { success ->
             if (!success) {
                 return@init
@@ -22,7 +22,7 @@ class BannerView: IBannerView {
         }
     }
 
-    private fun loadBanner(container: FrameLayout, config: String?, carousel: Boolean) {
+    private fun loadBanner(container: FrameLayout, config: String, carousel: Boolean) {
         TTAdSdk.getAdManager().createAdNative(container.context)
             .loadBannerExpressAd(
                 createAdSlot(config!!, container.width, container.height), object: TTAdNative.NativeExpressAdListener {

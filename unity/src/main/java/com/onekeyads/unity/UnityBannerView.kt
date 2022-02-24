@@ -19,7 +19,7 @@ class UnityBannerView: IBannerView, BannerView.IListener {
     private var runnable: Runnable? = null
     private var adsView: BannerView? = null
 
-    override fun attachToBanner(container: FrameLayout, config: String?, carousel: Boolean) {
+    override fun attachToBanner(container: FrameLayout, config: String, carousel: Boolean) {
         this.container = container
         this.unitId = config
         checkSdkState()

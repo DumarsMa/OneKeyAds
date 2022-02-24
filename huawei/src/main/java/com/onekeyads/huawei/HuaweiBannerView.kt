@@ -17,7 +17,7 @@ class HuaweiBannerView: IBannerView {
     private var isAttached: Boolean = false
     private var bannerView: BannerView? = null
 
-    override fun attachToBanner(container: FrameLayout, config: String?, carousel: Boolean) {
+    override fun attachToBanner(container: FrameLayout, adsId: String, carousel: Boolean) {
         isAttached = true
         bannerView?.apply {
             val parent = this.parent
@@ -26,7 +26,7 @@ class HuaweiBannerView: IBannerView {
             }
             destroy()
         }
-        if (TextUtils.isEmpty(config)) {
+        if (TextUtils.isEmpty(adsId)) {
             return
         }
         AdsFactory.init(container.context) { success ->
@@ -37,7 +37,7 @@ class HuaweiBannerView: IBannerView {
             }
             bannerView = BannerView(container.context).apply {
                 container.addView(this)
-                adId = config
+                adId = adsId
                 bannerAdSize = BannerAdSize(container.width, container.height)
                 setBannerRefresh(60)
                 adListener = object: AdListener() {

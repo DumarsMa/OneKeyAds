@@ -25,20 +25,20 @@ class AdsFactoryImpl: IAdsFactory {
         }
         MobileAds.initialize(context.applicationContext, object: OnInitializationCompleteListener {
             override fun onInitializationComplete(status: InitializationStatus) {
-                if (status.adapterStatusMap.isEmpty()) {
-                    Log.i(TAG, "onInitializationComplete fail adapterStatusMap empty")
-                    hasInit = false
-                    callback.invoke(false)
-                    return
-                }
-                status.adapterStatusMap.forEach { entry ->
-                    if (entry.value.initializationState == AdapterStatus.State.NOT_READY) {
-                        hasInit = false
-                        callback.invoke(false)
-                        Log.i(TAG, "onInitializationComplete state not ready ${entry.value.description}")
-                        return
-                    }
-                }
+//                if (status.adapterStatusMap.isEmpty()) {
+//                    Log.i(TAG, "onInitializationComplete fail adapterStatusMap empty")
+//                    hasInit = false
+//                    callback.invoke(false)
+//                    return
+//                }
+//                status.adapterStatusMap.forEach { entry ->
+//                    if (entry.value.initializationState == AdapterStatus.State.NOT_READY) {
+//                        hasInit = false
+//                        callback.invoke(false)
+//                        Log.i(TAG, "onInitializationComplete state not ready ${entry.value.description}")
+//                        return
+//                    }
+//                }
                 Log.i(TAG, "onInitializationComplete success")
                 hasInit = true
                 callback.invoke(true)

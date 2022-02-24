@@ -4,7 +4,7 @@ import android.widget.FrameLayout
 
 interface IBannerView {
     fun attachToBanner(container: FrameLayout,
-                       adsId: String?,
+                       adsId: String,
                        carousel: Boolean)
 
     fun detachFromBanner(container: FrameLayout)
