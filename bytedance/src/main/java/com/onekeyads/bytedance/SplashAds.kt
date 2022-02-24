@@ -52,10 +52,8 @@ class SplashAds: ISplashAds() {
         }
         return AdSlot.Builder()
             .setCodeId(codeId)
-            .setExpressViewAcceptedSize(360.5f, 804f)
-            .setImageAcceptedSize(1080, 2412)
-//            .setExpressViewAcceptedSize(widthDp, heightDp)
-//            .setImageAcceptedSize(widthPixels, heightPixels)
+            .setExpressViewAcceptedSize(widthDp, heightDp)
+            .setImageAcceptedSize(widthPixels, heightPixels)
             .setAdLoadType(TTAdLoadType.PRELOAD)
             .build()
     }
