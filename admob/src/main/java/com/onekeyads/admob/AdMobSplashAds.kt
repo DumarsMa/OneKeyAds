@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.res.Configuration
 import android.util.Log
 import com.google.android.gms.ads.AdError
+import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.admanager.AdManagerAdRequest
@@ -58,8 +59,8 @@ class AdMobSplashAds: ISplashAds() {
         }
     }
 
-    private fun createAdRequest(): AdManagerAdRequest {
-        return AdManagerAdRequest()
+    private fun createAdRequest(): AdRequest {
+        return AdRequest.Builder().build()
     }
 
     override fun onStart(activity: Activity, callBack: ((Boolean) -> Unit)?) {
