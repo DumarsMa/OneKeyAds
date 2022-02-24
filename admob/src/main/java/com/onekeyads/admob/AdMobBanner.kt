@@ -1,6 +1,5 @@
 package com.onekeyads.admob
 
-import android.util.DisplayMetrics
 import android.util.Log
 import android.widget.FrameLayout
 import com.google.android.gms.ads.*

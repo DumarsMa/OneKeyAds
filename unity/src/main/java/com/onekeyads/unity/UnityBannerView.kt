@@ -12,52 +12,17 @@ import com.unity3d.services.banners.UnityBannerSize
 
 private const val TAG = "UnityBannerView"
 class UnityBannerView: IBannerView, BannerView.IListener {
-
-    private var container: FrameLayout? = null
-    private var unitId: String? = null
-
     private var runnable: Runnable? = null
     private var adsView: BannerView? = null
 
-    override fun attachToBanner(container: FrameLayout, config: String, carousel: Boolean) {
-        this.container = container
-        this.unitId = config
-        checkSdkState()
-    }
-
-    private fun checkSdkState(delay: Long = 0) {
-        val runnable = Runnable {
-            val context = container?.context ?: return@Runnable
-            AdsFactory.init(context) { success ->
-                if (success) {
-                    Log.i(TAG, "checkSdkState sdk init success")
-                    loadBanner()
-                } else {
-                    Log.i(TAG, "checkSdkState sdk init fail")
-                    checkSdkState(5)
-                }
-            }
-        }
-        this.runnable = runnable
-        if (delay == 0L) {
-            runnable.run()
-        } else {
-            container?.postDelayed(runnable, delay)
-        }
-    }
-
-    private fun loadBanner() {
-        if (TextUtils.isEmpty(unitId)) {
-            return
-        }
-        container?.post {
-            val container = this.container
-            val activity = container?.context ?: return@post
+    override fun attachToBanner(container: FrameLayout, adsId: String, carousel: Boolean) {
+        container.post {
+            val activity = container.context ?: return@post
             if (activity !is Activity) {
                 return@post
             }
             Log.i(TAG, "loadBanner")
-            val adsView = BannerView(activity as? Activity, unitId, UnityBannerSize(container.width,
+            val adsView = BannerView(activity as? Activity, adsId, UnityBannerSize(container.width,
                 container.height))
             adsView.listener = this
             adsView.load()
@@ -89,6 +54,5 @@ class UnityBannerView: IBannerView, BannerView.IListener {
 
     override fun detachFromBanner(container: FrameLayout) {
         container.removeCallbacks(runnable)
-        this.container = null
     }
 }

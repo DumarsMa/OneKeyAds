@@ -1,10 +1,8 @@
 package com.onekeyads.oneway
 
-import android.text.TextUtils
 import android.util.Log
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import com.onekeyads.base.AdsFactory
 import com.onekeyads.base.view.banner.IBannerView
 import com.onekeyads.oneway.banner.CarouselBannerView
 import com.onekeyads.oneway.banner.SingleBannerView
@@ -21,18 +19,6 @@ class OnewayBannerView: IBannerView {
 
     override fun attachToBanner(container: FrameLayout, config: String, carousel: Boolean) {
         isAttached = true
-        if (TextUtils.isEmpty(config)) {
-            return
-        }
-        AdsFactory.init(container.context) { success ->
-            if (!success) {
-                return@init
-            }
-            loadBanner(container, config, carousel)
-        }
-    }
-
-    private fun loadBanner(container: FrameLayout, config: String, carousel: Boolean) {
         feedAd = OWFeedAd(container.context, config).apply {
             load(object: OWFeedAdListener {
                 override fun onError(error: OnewaySdkError?, msg: String?) {

@@ -3,10 +3,12 @@ package com.onekeyads.base.view.banner
 import android.content.Context
 import android.text.TextUtils
 import android.util.AttributeSet
+import android.util.Log
 import android.widget.FrameLayout
 import com.onekeyads.base.AdsFactory
 import com.onekeyads.base.R
 
+private const val TAG = "BannerAdsView"
 class BannerAdsView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : FrameLayout(context, attrs){
@@ -29,8 +31,13 @@ class BannerAdsView @JvmOverloads constructor(
         }
         this.adsId = adsId
         if (!TextUtils.isEmpty(adsId)) {
-            viewImpl = AdsFactory.createBannerView()
-            viewImpl?.attachToBanner(this, adsId, carousel)
+            AdsFactory.init(context) { success ->
+                Log.i(TAG, "init result $success")
+                if (success) {
+                    viewImpl = AdsFactory.createBannerView()
+                    viewImpl?.attachToBanner(this, adsId, carousel)
+                }
+            }
         }
     }
 

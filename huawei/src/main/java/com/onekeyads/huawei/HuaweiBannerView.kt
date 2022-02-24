@@ -26,11 +26,6 @@ class HuaweiBannerView: IBannerView {
             }
             destroy()
         }
-        if (TextUtils.isEmpty(adsId)) {
-            return
-        }
-        AdsFactory.init(container.context) { success ->
-        }
         container.post {
             if (!isAttached) {
                 return@post
