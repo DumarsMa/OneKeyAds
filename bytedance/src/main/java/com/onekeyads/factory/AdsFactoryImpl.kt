@@ -17,6 +17,7 @@ private const val TAG = "AdsFactoryImpl"
 
 class AdsFactoryImpl : IAdsFactory {
 
+    private var hasInit: Boolean = false
     private lateinit var config: AdsConfig
 
     override fun setConfig(config: AdsConfig) {
@@ -24,7 +25,7 @@ class AdsFactoryImpl : IAdsFactory {
     }
     override fun init(context: Context, callback: (Boolean) -> Unit) {
         assert(this::config.isInitialized)
-        if (TTAdSdk.isInitSuccess()) {
+        if (hasInit) {
             callback.invoke(true)
             return
         }
@@ -32,7 +33,7 @@ class AdsFactoryImpl : IAdsFactory {
             TTAdConfig.Builder()
                 .appId(config.appId)
                 .debug(config.debuggable)
-//                .appName(config.appName)
+                .appName(config.appName)
                 .useTextureView(true)
                 .supportMultiProcess(false)
                 .needClearTaskReset()
@@ -41,11 +42,13 @@ class AdsFactoryImpl : IAdsFactory {
             object : TTAdSdk.InitCallback {
                 override fun success() {
                     Log.i(TAG, "initSuccess")
+                    hasInit = true
                     callback.invoke(true)
                 }
 
                 override fun fail(code: Int, msg: String?) {
                     Log.i(TAG, "initFail $code, $msg")
+                    hasInit = false
                     callback.invoke(false)
                 }
             })

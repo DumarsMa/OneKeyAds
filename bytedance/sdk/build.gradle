@@ -1,0 +1,8 @@
+configurations.maybeCreate("default")
+artifacts.add("default", file("open_ad_sdk_4.3.0.1.aar"))
+apply from: '../../publish.gradle'
+ext {
+    PUBLISH_GROUPID = "io.github.dumarsma"
+    PUBLISH_ARTIFACTID = "bytedanceads-sdk"
+    PUBLISH_ARTIFACT = "$project.projectDir/open_ad_sdk_4.3.0.1.aar"
+}

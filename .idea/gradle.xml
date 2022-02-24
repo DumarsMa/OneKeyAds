@@ -10,9 +10,11 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/admob" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/base" />
             <option value="$PROJECT_DIR$/bytedance" />
+            <option value="$PROJECT_DIR$/bytedance/sdk" />
             <option value="$PROJECT_DIR$/huawei" />
             <option value="$PROJECT_DIR$/oneway" />
             <option value="$PROJECT_DIR$/oneway/sdk" />

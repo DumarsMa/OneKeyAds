@@ -11,27 +11,13 @@ import com.unity3d.ads.UnityAds
 import com.unity3d.ads.UnityAdsShowOptions
 
 private const val TAG = "UnityInterstitialAds"
-class UnitySplashAds: ISplashAds {
+class UnitySplashAds: ISplashAds() {
 
-    override fun attach(activity: Activity, config: String, callBack: (Boolean) -> Unit) {
-        if (TextUtils.isEmpty(config)) {
-            callBack.invoke(false)
-            return
-        }
-        AdsFactory.init(activity) { success ->
-            if (!success) {
-                callBack.invoke(false)
-                return@init
-            }
-            load(activity, config!!, callBack)
-        }
-    }
-
-    private fun load(activity: Activity, placementId: String, callBack: (Boolean) -> Unit) {
-        UnityAds.load(placementId, object: IUnityAdsLoadListener {
+    override fun loadSplash(activity: Activity, splashAdsId: String, callBack: (Boolean) -> Unit) {
+        UnityAds.load(splashAdsId, object: IUnityAdsLoadListener {
             override fun onUnityAdsAdLoaded(placement: String?) {
                 Log.i(TAG, "onUnityAdsAdLoaded->$placement")
-                showAd(activity, placementId, callBack)
+                showAd(activity, splashAdsId, callBack)
             }
 
             override fun onUnityAdsFailedToLoad(
@@ -73,8 +59,5 @@ class UnitySplashAds: ISplashAds {
                 callBack.invoke(true)
             }
         })
-    }
-
-    override fun detach(activity: Activity) {
     }
 }

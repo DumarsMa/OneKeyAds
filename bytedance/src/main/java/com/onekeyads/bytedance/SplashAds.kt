@@ -6,28 +6,14 @@ import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import com.bytedance.sdk.openadsdk.*
-import com.onekeyads.base.AdsFactory
 import com.onekeyads.base.view.splash.ISplashAds
 
 private const val TAG = "SplashAds"
-class SplashAds: ISplashAds {
+class SplashAds: ISplashAds() {
 
-    private var callBack: ((Boolean) -> Unit)? = null
-
-    override fun attach(activity: Activity, splashAdsId: String, callBack: (Boolean) -> Unit) {
-        AdsFactory.init(activity) { success ->
-            Log.i(TAG, "initResult $success")
-            if (!success) {
-                callBack.invoke(false)
-            } else {
-                loadSplashAds(activity, splashAdsId, callBack)
-            }
-        }
-    }
-
-    private fun loadSplashAds(activity: Activity, config: String, callBack: (Boolean) -> Unit) {
+    override fun loadSplash(activity: Activity, splashAdsId: String, callBack: (Boolean) -> Unit) {
         TTAdSdk.getAdManager().createAdNative(activity)
-            .loadSplashAd(createAdSlot(activity, config), object: TTAdNative.SplashAdListener {
+            .loadSplashAd(createAdSlot(activity, splashAdsId), object: TTAdNative.SplashAdListener {
                 override fun onError(code: Int, msg: String?) {
                     Log.i(TAG, "loadSplashAds error $code, $msg")
                     callBack.invoke(false)
@@ -45,7 +31,6 @@ class SplashAds: ISplashAds {
                         callBack.invoke(false)
                         return
                     }
-                    this@SplashAds.callBack = callBack
                     splashAd.setSplashInteractionListener(createSplashInteractionListener(callBack))
                     activity.addContentView(view, ViewGroup.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
@@ -67,8 +52,10 @@ class SplashAds: ISplashAds {
         }
         return AdSlot.Builder()
             .setCodeId(codeId)
-            .setExpressViewAcceptedSize(widthDp, heightDp)
-            .setImageAcceptedSize(widthPixels, heightPixels)
+            .setExpressViewAcceptedSize(360.5f, 804f)
+            .setImageAcceptedSize(1080, 2412)
+//            .setExpressViewAcceptedSize(widthDp, heightDp)
+//            .setImageAcceptedSize(widthPixels, heightPixels)
             .setAdLoadType(TTAdLoadType.PRELOAD)
             .build()
     }
@@ -95,12 +82,8 @@ class SplashAds: ISplashAds {
         }
     }
 
-    override fun onResume(activity: Activity) {
-        super.onResume(activity)
+    override fun onStart(activity: Activity, callBack: ((Boolean) -> Unit)?) {
+        super.onStart(activity, callBack)
         callBack?.invoke(true)
-    }
-
-    override fun detach(activity: Activity) {
-        callBack = null
     }
 }
