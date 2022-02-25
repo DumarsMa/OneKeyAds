@@ -9,9 +9,10 @@
 
     <com.onekeyads.base.view.banner.BannerAdsView
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="200dp"
         app:adsCarousel="true"
-        app:adsId="@string/bannerId1"/>
+        app:adsId="@string/bannerId1"
+        app:aspectRatio="600:500" />
 
 
     <com.onekeyads.base.view.banner.BannerAdsView

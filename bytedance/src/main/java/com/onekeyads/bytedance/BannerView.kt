@@ -2,6 +2,7 @@ package com.onekeyads.bytedance
 
 import android.app.Activity
 import android.util.Log
+import android.view.Gravity
 import android.view.View
 import android.widget.FrameLayout
 import com.bytedance.sdk.openadsdk.*
@@ -13,18 +14,12 @@ class BannerView: IBannerView {
 
     private var container: FrameLayout? = null
     private var bannerAd: TTNativeExpressAd? = null
-    override fun attachToBanner(container: FrameLayout, config: String, carousel: Boolean) {
-        container.post {
-            loadBanner(container, config, carousel)
-        }
-    }
-
-    private fun loadBanner(container: FrameLayout, adsId: String, carousel: Boolean) {
+    override fun attachToBanner(container: FrameLayout, bannerConfig: IBannerView.BannerConfig) {
         val density = container.resources.displayMetrics.density
         TTAdSdk.getAdManager().createAdNative(container.context)
             .loadBannerExpressAd(
-                createAdSlot(adsId, (container.width /density).toInt(),
-                    (container.height / density).toInt()
+                createAdSlot(bannerConfig.adsId, (bannerConfig.width /density).toInt(),
+                    (bannerConfig.height / density).toInt()
                 ), object: TTAdNative.NativeExpressAdListener {
                     override fun onError(code: Int, msg: String?) {
                         Log.i(TAG, "loadBanner error $code, $msg")
@@ -33,12 +28,12 @@ class BannerView: IBannerView {
                     override fun onNativeExpressAdLoad(ads: MutableList<TTNativeExpressAd>?) {
                         Log.i(TAG, "onNativeExpressAdLoad ${ads?.size}")
                         val bannerAd = ads?.get(0) ?: return
-                        if (carousel) {
+                        if (bannerConfig.carousel) {
                             bannerAd.setSlideIntervalTime(30 * 1000)
                         }
                         this@BannerView.container = container
                         this@BannerView.bannerAd = bannerAd
-                        bannerAd.setExpressInteractionListener(createExpressInteractionListener(container))
+                        bannerAd.setExpressInteractionListener(createExpressInteractionListener(container, bannerConfig))
                         bannerAd.setDownloadListener(createDownloadListener())
                         if (container.context is Activity) {
                             bannerAd.setDislikeCallback(container.context as Activity, createDislikeCallBack())
@@ -59,7 +54,7 @@ class BannerView: IBannerView {
             .build()
     }
 
-    private fun createExpressInteractionListener(container: FrameLayout): TTNativeExpressAd.ExpressAdInteractionListener {
+    private fun createExpressInteractionListener(container: FrameLayout, bannerConfig: IBannerView.BannerConfig): TTNativeExpressAd.ExpressAdInteractionListener {
         return object : TTNativeExpressAd.ExpressAdInteractionListener {
             override fun onAdClicked(view: View?, type: Int) {
                 Log.i(TAG, "onAdClicked $type")
@@ -76,7 +71,9 @@ class BannerView: IBannerView {
             override fun onRenderSuccess(view: View?, width: Float, height: Float) {
                 Log.i(TAG, "onRenderSuccess $width $height")
                 container.removeAllViews()
-                container.addView(view)
+                container.addView(view, FrameLayout.LayoutParams(bannerConfig.width, bannerConfig.height).apply {
+                    gravity = Gravity.CENTER
+                })
             }
         }
     }

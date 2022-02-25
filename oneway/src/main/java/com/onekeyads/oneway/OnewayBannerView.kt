@@ -1,7 +1,7 @@
 package com.onekeyads.oneway
 
 import android.util.Log
-import android.view.ViewGroup
+import android.view.Gravity
 import android.widget.FrameLayout
 import com.onekeyads.base.view.banner.IBannerView
 import com.onekeyads.oneway.banner.CarouselBannerView
@@ -17,9 +17,9 @@ class OnewayBannerView: IBannerView {
     private var feedAd: OWFeedAd? = null
     private var isAttached: Boolean = false
 
-    override fun attachToBanner(container: FrameLayout, config: String, carousel: Boolean) {
+    override fun attachToBanner(container: FrameLayout, bannerConfig: IBannerView.BannerConfig) {
         isAttached = true
-        feedAd = OWFeedAd(container.context, config).apply {
+        feedAd = OWFeedAd(container.context, bannerConfig.adsId).apply {
             load(object: OWFeedAdListener {
                 override fun onError(error: OnewaySdkError?, msg: String?) {
                     Log.i(TAG, "loadBanner error->$error, $msg")
@@ -30,13 +30,15 @@ class OnewayBannerView: IBannerView {
                     if (ads?.isEmpty() != false) {
                         return
                     }
-                    val view = if (carousel) {
+                    val view = if (bannerConfig.carousel) {
                         CarouselBannerView(container.context)
                     } else {
                         SingleBannerView(container.context)
                     }
-                    container.addView(view, ViewGroup.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
-                        FrameLayout.LayoutParams.MATCH_PARENT))
+                    container.addView(view, FrameLayout.LayoutParams(bannerConfig.width,
+                        bannerConfig.height).apply {
+                        gravity = Gravity.CENTER
+                    })
                     view.setAds(ads)
                 }
             })

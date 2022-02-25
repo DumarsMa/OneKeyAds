@@ -3,5 +3,7 @@
     <declare-styleable name="BannerAdsView">
         <attr name="adsId" format="string"/>
         <attr name="adsCarousel" format="boolean"/>
+        <!--宽高比-->
+        <attr name="aspectRatio" format="string"/>
     </declare-styleable>
 </resources>
