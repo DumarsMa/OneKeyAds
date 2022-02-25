@@ -39,10 +39,19 @@ class SplashAds: ISplashAds() {
             }, 3500)
     }
 
-    private fun createAdSlot(context: Context, codeId: String): AdSlot {
-        val displayMetrics = context.resources.displayMetrics
-        val widthPixels = displayMetrics.widthPixels
-        val heightPixels = displayMetrics.heightPixels
+    private fun createAdSlot(activity: Activity, codeId: String): AdSlot {
+        val displayMetrics = activity.resources.displayMetrics
+        val decorView = activity.window.decorView
+        val widthPixels = if (decorView.width > 0) {
+            decorView.width
+        } else {
+            displayMetrics.widthPixels
+        }
+        val heightPixels = if (decorView.height > 0) {
+            decorView.height
+        } else {
+            displayMetrics.heightPixels
+        }
         val scale = displayMetrics.density
         var widthDp = widthPixels + 0.5f
         var heightDp = heightPixels + 0.5f
