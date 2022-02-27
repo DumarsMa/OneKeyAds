@@ -7,5 +7,5 @@ class AdsConfig(context: Context): AdsConfig("14851", context.getString(R.string
 
 object AdsConstant {
     val SplashAdsId = "video"
-    val RewardedAdId = ""
+    val RewardedAdId = "rewardedVideo"
 }
