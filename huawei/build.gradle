@@ -36,3 +36,8 @@ dependencies {
     implementation 'com.huawei.hms:ads-lite:13.4.50.300'
     api project(":base")
 }
+apply from: '../publish.gradle'
+ext {
+    PUBLISH_GROUPID = "io.github.dumarsma"
+    PUBLISH_ARTIFACTID = "huaweiads"
+}
