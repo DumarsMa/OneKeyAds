@@ -7,4 +7,5 @@ class AdsConfig(context: Context): AdsConfig("", context.getString(R.string.app_
 
 object AdsConstant {
     val SplashAdsId = "ca-app-pub-3940256099942544/3419835294"
+    val RewardedAdId = "ca-app-pub-3940256099942544/5224354917"
 }

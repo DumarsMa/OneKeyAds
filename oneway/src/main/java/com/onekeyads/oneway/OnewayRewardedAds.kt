@@ -9,12 +9,16 @@ import mobi.oneway.export.enums.OnewayAdCloseType
 import mobi.oneway.export.enums.OnewaySdkError
 
 private const val TAG = "OnewayRewardedAds"
-class OnewayRewardedAds: IRewardedAds {
+class OnewayRewardedAds: IRewardedAds() {
 
     private var rewardedAds: OWRewardedAd? = null
-    override fun attach(context: Activity, config: String?, callBack: (IRewardedAds.RewardedResult) -> Unit) {
+    override fun loadRewardedAds(
+        context: Activity,
+        adsId: String,
+        callBack: (RewardedResult) -> Unit
+    ) {
         rewardedAds?.destory()
-        rewardedAds = OWRewardedAd(context, config, object: OWRewardedAdListener {
+        rewardedAds = OWRewardedAd(context, adsId, object: OWRewardedAdListener {
             override fun onAdReady() {
                 Log.i(TAG, "onAdReady")
                 rewardedAds?.show(context)
@@ -46,6 +50,7 @@ class OnewayRewardedAds: IRewardedAds {
     }
 
     override fun detach(context: Activity) {
+        super.detach(context)
         rewardedAds?.destory()
     }
 }

@@ -1,9 +1,7 @@
 package com.onekeyads.unity
 
 import android.app.Activity
-import android.text.TextUtils
 import android.util.Log
-import com.onekeyads.base.AdsFactory
 import com.onekeyads.base.view.rewarded.IRewardedAds
 import com.unity3d.ads.IUnityAdsLoadListener
 import com.unity3d.ads.IUnityAdsShowListener
@@ -11,27 +9,17 @@ import com.unity3d.ads.UnityAds
 import com.unity3d.ads.UnityAdsShowOptions
 
 private const val TAG = "UnityRewardedAds"
-class UnityRewardedAds: IRewardedAds {
+class UnityRewardedAds: IRewardedAds() {
 
-    override fun attach(context: Activity, config: String?, callBack: (IRewardedAds.RewardedResult) -> Unit) {
-        if (TextUtils.isEmpty(config)) {
-            callBack.invoke(IRewardedAds.RewardedResult.FAIL)
-            return
-        }
-        AdsFactory.init(context) { success ->
-            if (!success) {
-                callBack.invoke(IRewardedAds.RewardedResult.FAIL)
-                return@init
-            }
-            load(context, config!!, callBack)
-        }
-    }
-
-    private fun load(activity: Activity, placementId: String, callBack: (IRewardedAds.RewardedResult) -> Unit) {
-        UnityAds.load(placementId, object: IUnityAdsLoadListener {
+    override fun loadRewardedAds(
+        context: Activity,
+        adsId: String,
+        callBack: (RewardedResult) -> Unit
+    ) {
+        UnityAds.load(adsId, object: IUnityAdsLoadListener {
             override fun onUnityAdsAdLoaded(placement: String?) {
                 Log.i(TAG, "onUnityAdsAdLoaded->$placement")
-                showAd(activity, placementId, callBack)
+                showAd(context, adsId, callBack)
             }
 
             override fun onUnityAdsFailedToLoad(
@@ -73,8 +61,5 @@ class UnityRewardedAds: IRewardedAds {
                 callBack.invoke(IRewardedAds.RewardedResult.REWARDED)
             }
         })
-    }
-
-    override fun detach(context: Activity) {
     }
 }

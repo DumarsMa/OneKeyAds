@@ -49,6 +49,7 @@ abstract class ISplashAds {
             if (!success) {
                 callBack.invoke(false)
             } else {
+                activity.application.unregisterActivityLifecycleCallbacks(activityCallBacks)
                 activity.application.registerActivityLifecycleCallbacks(activityCallBacks)
                 currentCallback = callBack
                 loadSplash(activity, splashAdsId, callBack)

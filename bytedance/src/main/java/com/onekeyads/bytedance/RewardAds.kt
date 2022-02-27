@@ -3,15 +3,11 @@ package com.onekeyads.bytedance
 import android.app.Activity
 import com.onekeyads.base.view.rewarded.IRewardedAds
 
-class RewardAds: IRewardedAds {
-
-    override fun attach(
+class RewardAds: IRewardedAds() {
+    override fun loadRewardedAds(
         context: Activity,
-        config: String?,
-        callBack: (IRewardedAds.RewardedResult) -> Unit
+        adsId: String,
+        callBack: (RewardedResult) -> Unit
     ) {
-    }
-
-    override fun detach(context: Activity) {
     }
 }
