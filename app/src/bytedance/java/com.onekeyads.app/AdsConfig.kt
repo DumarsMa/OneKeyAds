@@ -7,5 +7,8 @@ class AdsConfig(context: Context): AdsConfig("5001121", context.getString(R.stri
 
 object AdsConstant {
     val SplashAdsId = "801121648"
-    val RewardedAdId = ""
+    //竖屏
+//    val RewardedAdId = "901121365"
+    //横屏
+    val RewardedAdId = "901121430"
 }
