@@ -19,6 +19,7 @@ private const val TAG = "AdMobNativeAds"
 class AdMobNativeAds: INativeAd() {
 
     private var nativeAd: NativeAd? = null
+    private var nativeAdView: NativeAdView? = null
 
     override fun loadNativeAd(
         container: ViewGroup,
@@ -85,7 +86,9 @@ class AdMobNativeAds: INativeAd() {
                                container: ViewGroup,
                                contentContainer: NativeAdsContentContainer,
                                nativeAdOption: NativeAdOption) {
-        NativeAdView(container.context).apply {
+        (nativeAdView?.parent as? ViewGroup)?.removeView(nativeAdView)
+        (contentContainer.parent as? ViewGroup)?.removeView(contentContainer)
+        nativeAdView = NativeAdView(container.context).apply {
             addView(contentContainer)
             container.addView(this, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT))
