@@ -28,6 +28,13 @@ class AdMobNativeAds: INativeAd() {
         nativeAdOption: NativeAdOption,
         callBack: (Boolean) -> Unit
     ) {
+        if (null != nativeAd) {
+            if (nativeAdOption.renderDirect) {
+                renderNativeAd(nativeAd!!, container, contentContainer)
+            }
+            callBack.invoke(true)
+            return
+        }
         val adOption = NativeAdOptions.Builder()
             .setAdChoicesPlacement(nativeAdOption.choosePlacementPosition.ordinal)
             .setVideoOptions(VideoOptions.Builder()
@@ -52,22 +59,6 @@ class AdMobNativeAds: INativeAd() {
             AdRequest.Builder()
                 .build()
         )
-    }
-
-    override fun renderNativeAd(
-        container: ViewGroup,
-        contentContainer: NativeAdsContentContainer,
-        adId: String,
-        nativeAdOption: NativeAdOption,
-        callBack: (Boolean) -> Unit
-    ) {
-        if (null != nativeAd) {
-            renderNativeAd(nativeAd!!, container, contentContainer)
-            callBack.invoke(true)
-        } else {
-            nativeAdOption.renderDirect = true
-            loadNativeAd(container, contentContainer, adId, nativeAdOption, callBack)
-        }
     }
 
     private fun createAdListener(callBack: (Boolean) -> Unit): AdListener {
@@ -168,5 +159,6 @@ class AdMobNativeAds: INativeAd() {
 
     override fun detach(container: ViewGroup) {
         nativeAd?.destroy()
+        nativeAd = null
     }
 }

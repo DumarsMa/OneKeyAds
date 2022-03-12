@@ -12,6 +12,7 @@ class NativeAdView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : FrameLayout(context, attrs) {
 
+    private var releaseAfterDetach: Boolean = true
     private var nativeAd: INativeAd? = null
     private var adId: String?
     private var subContainer: NativeAdsContentContainer? = null
@@ -28,6 +29,7 @@ class NativeAdView @JvmOverloads constructor(
         videoLoop = typedArray.getBoolean(R.styleable.NativeAdView_nativeAdVideoLoop, false)
         choosePosition = typedArray.getInt(R.styleable.NativeAdView_nativeAdChoicesPlacementPosition, 1)
         mediaAspectRatio = typedArray.getInt(R.styleable.NativeAdView_nativeAdMediaAspectRatio, 0)
+        releaseAfterDetach = typedArray.getBoolean(R.styleable.NativeAdView_nativeAdReleaseAfterDetach, true)
         val renderDirect = typedArray.getBoolean(R.styleable.NativeAdView_nativeAdRenderDirect, true)
         typedArray.recycle()
         setSubContainer(inflateId)
@@ -49,6 +51,10 @@ class NativeAdView @JvmOverloads constructor(
 
     fun setSubContainer(container: NativeAdsContentContainer) {
         this.subContainer = container
+    }
+
+    fun setReleaseAfterDetach(release: Boolean) {
+        releaseAfterDetach = release
     }
 
     fun setVideoLoop(loop: Boolean) {
@@ -78,11 +84,13 @@ class NativeAdView @JvmOverloads constructor(
         if (null == subContainer) {
             throw Exception("must set subContainer")
         }
-        nativeAd?.detach(this)
         removeAllViews()
         AdsFactory.init(context) { success ->
             if (success) {
-                nativeAd = AdsFactory.createNativeAd().apply {
+                if (null == nativeAd) {
+                    nativeAd = AdsFactory.createNativeAd()
+                }
+                nativeAd?.apply {
                     val nativeAdOption = INativeAd.NativeAdOption().apply {
                         this.renderDirect = renderDirect
                         isVideoMute = videoMute
@@ -117,8 +125,14 @@ class NativeAdView @JvmOverloads constructor(
         load()
     }
 
-    override fun onDetachedFromWindow() {
+    fun release() {
         nativeAd?.detach(this)
+    }
+
+    override fun onDetachedFromWindow() {
+        if (releaseAfterDetach) {
+            nativeAd?.detach(this)
+        }
         super.onDetachedFromWindow()
     }
 }

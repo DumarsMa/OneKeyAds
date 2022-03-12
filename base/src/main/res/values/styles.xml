@@ -33,6 +33,8 @@
             <enum name="portrait" value="3"/>
             <enum name="square" value="4"/>
         </attr>
+        <!--onDetachFromWindow是否回收-->
+        <attr name="nativeAdReleaseAfterDetach" format="boolean"/>
     </declare-styleable>
 
     <declare-styleable name="NativeAdsContentContainer">
