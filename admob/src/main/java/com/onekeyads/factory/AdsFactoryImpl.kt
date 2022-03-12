@@ -7,10 +7,12 @@ import com.google.android.gms.ads.initialization.AdapterStatus
 import com.google.android.gms.ads.initialization.InitializationStatus
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener
 import com.onekeyads.admob.AdMobBanner
+import com.onekeyads.admob.AdMobNativeAds
 import com.onekeyads.admob.AdMobRewardAds
 import com.onekeyads.admob.AdMobSplashAds
 import com.onekeyads.base.IAdsFactory
 import com.onekeyads.base.view.banner.IBannerView
+import com.onekeyads.base.view.nativead.INativeAd
 import com.onekeyads.base.view.rewarded.IRewardedAds
 import com.onekeyads.base.view.splash.ISplashAds
 
@@ -56,5 +58,9 @@ class AdsFactoryImpl: IAdsFactory {
 
     override fun createRewardedAds(): IRewardedAds {
         return AdMobRewardAds()
+    }
+
+    override fun createNativeAd(): INativeAd {
+        return AdMobNativeAds()
     }
 }

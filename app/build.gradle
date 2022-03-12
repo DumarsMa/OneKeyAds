@@ -34,18 +34,18 @@ android {
         bytedance {
             dimension "packageType"
         }
-        huawei {
-            dimension "packageType"
-        }
+//        huawei {
+//            dimension "packageType"
+//        }
         admob {
             dimension "packageType"
         }
-        unity {
-            dimension "packageType"
-        }
-        oneway {
-            dimension "packageType"
-        }
+//        unity {
+//            dimension "packageType"
+//        }
+//        oneway {
+//            dimension "packageType"
+//        }
     }
 }
 
@@ -60,7 +60,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     bytedanceImplementation project(":bytedance")
     admobImplementation project(":admob")
-    huaweiImplementation project(":huawei")
-    onewayImplementation project(":oneway")
-    unityImplementation project(":unity")
+//    huaweiImplementation project(":huawei")
+//    onewayImplementation project(":oneway")
+//    unityImplementation project(":unity")
 }

@@ -2,6 +2,7 @@ package com.onekeyads.base
 
 import android.content.Context
 import com.onekeyads.base.view.banner.IBannerView
+import com.onekeyads.base.view.nativead.INativeAd
 import com.onekeyads.base.view.splash.ISplashAds
 import com.onekeyads.base.view.rewarded.IRewardedAds
 
@@ -28,5 +29,9 @@ object AdsFactory: IAdsFactory {
 
     override fun createRewardedAds(): IRewardedAds {
         return adsFactoryImpl.createRewardedAds()
+    }
+
+    override fun createNativeAd(): INativeAd {
+        return adsFactoryImpl.createNativeAd()
     }
 }
