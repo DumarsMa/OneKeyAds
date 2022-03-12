@@ -10,9 +10,17 @@ abstract class INativeAd {
                               nativeAdOption: NativeAdOption,
                               callBack: (Boolean) -> Unit)
 
+    abstract fun renderNativeAd(container: ViewGroup,
+                                contentContainer: NativeAdsContentContainer,
+                                adId: String,
+                                nativeAdOption: NativeAdOption,
+                                callBack: (Boolean) -> Unit)
+
     abstract fun detach(container: ViewGroup)
 
     class NativeAdOption {
+
+        var renderDirect: Boolean = true
 
         var choosePlacementPosition: NativeAdChoosePosition = NativeAdChoosePosition.TOP_RIGHT
 

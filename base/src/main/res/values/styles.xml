@@ -16,6 +16,8 @@
         <attr name="nativeAdVideoMute" format="boolean"/>
         <!--视频是否循环-->
         <attr name="nativeAdVideoLoop" format="boolean"/>
+        <!--加载完直接渲染-->
+        <attr name="nativeAdRenderDirect" format="boolean"/>
         <!--广告选择叠加层-->
         <attr name="nativeAdChoicesPlacementPosition" format="integer">
             <enum name="TopLeft" value="0"/>

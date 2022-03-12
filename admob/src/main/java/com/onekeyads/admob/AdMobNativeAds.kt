@@ -38,7 +38,9 @@ class AdMobNativeAds: INativeAd() {
         val adLoader = AdLoader.Builder(container.context, adId)
             .forNativeAd { nativeAd ->
                 this.nativeAd = nativeAd
-                renderNativeAd(nativeAd, container, contentContainer, nativeAdOption)
+                if (nativeAdOption.renderDirect) {
+                    renderNativeAd(nativeAd, container, contentContainer)
+                }
                 callBack.invoke(true)
             }
             .withAdListener(createAdListener(callBack))
@@ -50,6 +52,22 @@ class AdMobNativeAds: INativeAd() {
             AdRequest.Builder()
                 .build()
         )
+    }
+
+    override fun renderNativeAd(
+        container: ViewGroup,
+        contentContainer: NativeAdsContentContainer,
+        adId: String,
+        nativeAdOption: NativeAdOption,
+        callBack: (Boolean) -> Unit
+    ) {
+        if (null != nativeAd) {
+            renderNativeAd(nativeAd!!, container, contentContainer)
+            callBack.invoke(true)
+        } else {
+            nativeAdOption.renderDirect = true
+            loadNativeAd(container, contentContainer, adId, nativeAdOption, callBack)
+        }
     }
 
     private fun createAdListener(callBack: (Boolean) -> Unit): AdListener {
@@ -84,24 +102,14 @@ class AdMobNativeAds: INativeAd() {
 
     private fun renderNativeAd(nativeAd: NativeAd,
                                container: ViewGroup,
-                               contentContainer: NativeAdsContentContainer,
-                               nativeAdOption: NativeAdOption) {
+                               contentContainer: NativeAdsContentContainer) {
+        Log.e("mbgtest ${hashCode()}", "renderNativeAd, ${container.childCount}", Throwable())
         (nativeAdView?.parent as? ViewGroup)?.removeView(nativeAdView)
         (contentContainer.parent as? ViewGroup)?.removeView(contentContainer)
         nativeAdView = NativeAdView(container.context).apply {
             addView(contentContainer)
             container.addView(this, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT))
-            nativeAd.mediaContent?.apply {
-                if (nativeAdOption.isVideoLoop) {
-                    videoController.videoLifecycleCallbacks = object: VideoController.VideoLifecycleCallbacks() {
-                        override fun onVideoEnd() {
-                            super.onVideoEnd()
-                            videoController.play()
-                        }
-                    }
-                }
-            }
             mediaView = addMediaView(contentContainer)
             headlineView = contentContainer.getChild(NativeAdsContentContainer.ChildType.HeadLine)?.apply {
                 (this as? TextView)?.text = nativeAd.headline
@@ -153,6 +161,7 @@ class AdMobNativeAds: INativeAd() {
     private fun addMediaView(contentContainer: NativeAdsContentContainer): MediaView {
         val mediaContainer = contentContainer.getChild(NativeAdsContentContainer.ChildType.Media) as? ViewGroup
             ?: throw Exception("not found Media Container, you must set a ViewGroup as media container")
+        mediaContainer.removeAllViews()
         val mediaView = MediaView(contentContainer.context)
         mediaContainer.addView(mediaView)
         return mediaView

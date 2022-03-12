@@ -28,10 +28,11 @@ class NativeAdView @JvmOverloads constructor(
         videoLoop = typedArray.getBoolean(R.styleable.NativeAdView_nativeAdVideoLoop, false)
         choosePosition = typedArray.getInt(R.styleable.NativeAdView_nativeAdChoicesPlacementPosition, 1)
         mediaAspectRatio = typedArray.getInt(R.styleable.NativeAdView_nativeAdMediaAspectRatio, 0)
+        val renderDirect = typedArray.getBoolean(R.styleable.NativeAdView_nativeAdRenderDirect, true)
         typedArray.recycle()
         setSubContainer(inflateId)
         if (!TextUtils.isEmpty(adId) && subContainer != null) {
-            load()
+            load(renderDirect)
         }
     }
 
@@ -70,7 +71,7 @@ class NativeAdView @JvmOverloads constructor(
         this.adId = id
     }
 
-    fun load(callBack: ((Boolean) -> Unit)? = null) {
+    fun load(renderDirect: Boolean = true, callBack: ((Boolean) -> Unit)? = null) {
         if (TextUtils.isEmpty(adId)) {
             throw Exception("must set adId")
         }
@@ -83,6 +84,7 @@ class NativeAdView @JvmOverloads constructor(
             if (success) {
                 nativeAd = AdsFactory.createNativeAd().apply {
                     val nativeAdOption = INativeAd.NativeAdOption().apply {
+                        this.renderDirect = renderDirect
                         isVideoMute = videoMute
                         isVideoLoop = videoLoop
                         choosePlacementPosition = when(choosePosition) {

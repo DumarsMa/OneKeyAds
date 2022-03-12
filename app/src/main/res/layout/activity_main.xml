@@ -46,6 +46,8 @@
             android:layout_width="wrap_content"
             android:layout_height="500dp"
             app:nativeAdId="/6499/example/native"
-            app:nativeAdInflateId="@layout/layout_native_ad"/>
+            app:nativeAdInflateId="@layout/layout_native_ad"
+            app:nativeAdVideoLoop="true"
+            app:nativeAdRenderDirect="false"/>
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
