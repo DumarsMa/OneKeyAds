@@ -112,6 +112,11 @@ class NativeAdView @JvmOverloads constructor(
         }
     }
 
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        load()
+    }
+
     override fun onDetachedFromWindow() {
         nativeAd?.detach(this)
         super.onDetachedFromWindow()
