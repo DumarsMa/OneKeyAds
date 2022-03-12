@@ -78,6 +78,7 @@ class NativeAdView @JvmOverloads constructor(
             throw Exception("must set subContainer")
         }
         nativeAd?.detach(this)
+        removeAllViews()
         AdsFactory.init(context) { success ->
             if (success) {
                 nativeAd = AdsFactory.createNativeAd().apply {
