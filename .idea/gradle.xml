@@ -16,13 +16,13 @@
             <option value="$PROJECT_DIR$/bytedance" />
             <option value="$PROJECT_DIR$/bytedance/sdk" />
             <option value="$PROJECT_DIR$/huawei" />
+            <option value="$PROJECT_DIR$/nativetemplates" />
             <option value="$PROJECT_DIR$/oneway" />
             <option value="$PROJECT_DIR$/oneway/sdk" />
             <option value="$PROJECT_DIR$/unity" />
             <option value="$PROJECT_DIR$/unity/sdk" />
           </set>
         </option>
-        <option name="resolveModulePerSourceSet" value="false" />
       </GradleProjectSettings>
     </option>
   </component>

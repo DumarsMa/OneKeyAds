@@ -1,21 +1,40 @@
 package com.onekeyads.base.view.nativead
 
-import android.content.Context
-import com.onekeyads.base.AdsFactory
+import android.view.ViewGroup
 
 abstract class INativeAd {
 
-    fun createNativeAd(context: Context, adId: String, callBack: (Boolean, NativeAdContent?) -> Unit) {
-        AdsFactory.init(context.applicationContext) { success ->
-            if (success) {
-                loadNativeAd(context, adId, callBack)
-            } else {
-                callBack.invoke(false, null)
-            }
-        }
+    abstract fun loadNativeAd(container: ViewGroup,
+                              contentContainer: NativeAdsContentContainer,
+                              adId: String,
+                              nativeAdOption: NativeAdOption,
+                              callBack: (Boolean) -> Unit)
+
+    abstract fun detach(container: ViewGroup)
+
+    class NativeAdOption {
+
+        var choosePlacementPosition: NativeAdChoosePosition = NativeAdChoosePosition.TOP_RIGHT
+
+        var mediaAspectRatio: MediaAspectRatio = MediaAspectRatio.NONE
+
+        var isVideoMute: Boolean = false
+
+        var isVideoLoop: Boolean = false
     }
 
-    abstract fun loadNativeAd(context: Context, adId: String, callBack: (Boolean, NativeAdContent?) -> Unit)
+    enum class NativeAdChoosePosition {
+        TOP_LEFT,
+        TOP_RIGHT,
+        BOTTOM_RIGHT,
+        BOTTOM_LEFT
+    }
 
-    abstract fun detach(context: Context)
+    enum class MediaAspectRatio {
+        NONE,
+        ANY,
+        LANDSCAPE,
+        PORTRAIT,
+        SQUARE
+    }
 }

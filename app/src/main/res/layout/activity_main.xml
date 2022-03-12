@@ -41,9 +41,11 @@
             android:layout_height="wrap_content"
             android:id="@+id/onekey_native_ad_load"
             android:text="加载原生广告"/>
-        <FrameLayout
+        <com.onekeyads.base.view.nativead.NativeAdView
             android:id="@+id/onekey_native_ad"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"/>
+            android:layout_width="wrap_content"
+            android:layout_height="500dp"
+            app:nativeAdId="/6499/example/native"
+            app:nativeAdInflateId="@layout/layout_native_ad"/>
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

@@ -1,41 +1,49 @@
 package com.onekeyads.admob
 
-import android.content.Context
+import android.text.TextUtils
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.RatingBar
+import android.widget.TextView
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.nativead.MediaView
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
+import com.google.android.gms.ads.nativead.NativeAdView
 import com.onekeyads.base.view.nativead.INativeAd
-import com.onekeyads.base.view.nativead.INativeAdMediaView
-import com.onekeyads.base.view.nativead.NativeAdContent
+import com.onekeyads.base.view.nativead.NativeAdsContentContainer
 
 private const val TAG = "AdMobNativeAds"
 class AdMobNativeAds: INativeAd() {
 
     private var nativeAd: NativeAd? = null
+    private var nativeAdView: NativeAdView? = null
 
     override fun loadNativeAd(
-        context: Context,
+        container: ViewGroup,
+        contentContainer: NativeAdsContentContainer,
         adId: String,
-        callBack: (Boolean, NativeAdContent?) -> Unit
+        nativeAdOption: NativeAdOption,
+        callBack: (Boolean) -> Unit
     ) {
-        val adLoader = AdLoader.Builder(context, adId)
+        val adOption = NativeAdOptions.Builder()
+            .setAdChoicesPlacement(nativeAdOption.choosePlacementPosition.ordinal)
+            .setVideoOptions(VideoOptions.Builder()
+                .setStartMuted(nativeAdOption.isVideoMute)
+                .build())
+            .setMediaAspectRatio(nativeAdOption.mediaAspectRatio.ordinal)
+            .build()
+        val adLoader = AdLoader.Builder(container.context, adId)
             .forNativeAd { nativeAd ->
                 this.nativeAd = nativeAd
-                val content = nativeAdToContent(context, nativeAd)
-                if (null == content) {
-                    callBack.invoke(false, null)
-                } else {
-                    callBack.invoke(true, content)
-                }
+                renderNativeAd(nativeAd, container, contentContainer, nativeAdOption)
+                callBack.invoke(true)
             }
             .withAdListener(createAdListener(callBack))
             .withNativeAdOptions(
-                NativeAdOptions.Builder()
-                    .build()
+                adOption
             )
             .build()
         adLoader.loadAd(
@@ -44,7 +52,7 @@ class AdMobNativeAds: INativeAd() {
         )
     }
 
-    private fun createAdListener(callBack: (Boolean, NativeAdContent?) -> Unit): AdListener {
+    private fun createAdListener(callBack: (Boolean) -> Unit): AdListener {
         return object: AdListener() {
             override fun onAdClicked() {
                 super.onAdClicked()
@@ -64,7 +72,7 @@ class AdMobNativeAds: INativeAd() {
             override fun onAdFailedToLoad(error: LoadAdError) {
                 super.onAdFailedToLoad(error)
                 Log.i(TAG, "onAdFailedToLoad $error")
-                callBack.invoke(false, null)
+                callBack.invoke(false)
             }
 
             override fun onAdClosed() {
@@ -74,105 +82,83 @@ class AdMobNativeAds: INativeAd() {
         }
     }
 
-    private fun nativeAdToContent(context: Context, nativeAd: NativeAd): NativeAdContent? {
-        val mediaView = if (nativeAd.mediaContent?.hasVideoContent() == true) {
-            createVideoView(context, nativeAd.mediaContent!!)
-        } else if (nativeAd.images.size > 0) {
-            createImageView(context, nativeAd.images[0])
-        } else {
-             return null
-        }
-        val nativeContent = NativeAdContent(mediaView)
-        return nativeContent
-    }
-
-    private fun createImageView(context: Context, image: NativeAd.Image): INativeAdMediaView {
-        return object : INativeAdMediaView {
-
-            val imageView = ImageView(context).apply {
-                scaleType = ImageView.ScaleType.CENTER_CROP
-                setImageDrawable(drawable)
-            }
-
-            override fun isVideo(): Boolean {
-                return false
-            }
-
-            override fun getView(): View {
-                if (null != image.drawable) {
-                    imageView.setImageDrawable(image.drawable)
-                } else if (null != image.uri) {
-                    imageView.setImageURI(image.uri)
-                }
-                return imageView
-            }
-        }
-    }
-
-    private fun createVideoView(context: Context, mediaContent: MediaContent): INativeAdMediaView {
-        return object: INativeAdMediaView {
-
-            private var isLoop: Boolean = false
-            private var customLifecycle: INativeAdMediaView.VideoLifecycle? = null
-            private val videLifecycle = object : VideoController.VideoLifecycleCallbacks() {
-                override fun onVideoStart() {
-                    super.onVideoStart()
-                    customLifecycle?.onVideoStart()
-                }
-
-                override fun onVideoPause() {
-                    super.onVideoPause()
-                    customLifecycle?.onVideoPause()
-                }
-
-                override fun onVideoPlay() {
-                    super.onVideoPlay()
-                    customLifecycle?.onVideoPlay()
-                }
-
-                override fun onVideoEnd() {
-                    super.onVideoEnd()
-                    customLifecycle?.onVideoEnd()
-                    if (isLoop) {
-                        mediaContent.videoController.play()
+    private fun renderNativeAd(nativeAd: NativeAd,
+                               container: ViewGroup,
+                               contentContainer: NativeAdsContentContainer,
+                               nativeAdOption: NativeAdOption) {
+        (nativeAdView?.parent as? ViewGroup)?.removeView(nativeAdView)
+        (contentContainer.parent as? ViewGroup)?.removeView(contentContainer)
+        nativeAdView = NativeAdView(container.context).apply {
+            addView(contentContainer)
+            container.addView(this, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT))
+            nativeAd.mediaContent?.apply {
+                if (nativeAdOption.isVideoLoop) {
+                    videoController.videoLifecycleCallbacks = object: VideoController.VideoLifecycleCallbacks() {
+                        override fun onVideoEnd() {
+                            super.onVideoEnd()
+                            videoController.play()
+                        }
                     }
                 }
-
-                override fun onVideoMute(mute: Boolean) {
-                    super.onVideoMute(mute)
-                    customLifecycle?.onVideoMute(mute)
+            }
+            mediaView = addMediaView(contentContainer)
+            headlineView = contentContainer.getChild(NativeAdsContentContainer.ChildType.HeadLine)?.apply {
+                (this as? TextView)?.text = nativeAd.headline
+            }
+            starRatingView = contentContainer.getChild(NativeAdsContentContainer.ChildType.Star)?.apply {
+                if (null == nativeAd.starRating) {
+                    visibility = View.INVISIBLE
+                } else {
+                    visibility = View.VISIBLE
+                    (this as? RatingBar)?.rating = nativeAd.starRating!!.toFloat()
                 }
             }
-
-            private var mediaView: MediaView = MediaView(context).apply {
-                mediaContent.videoController.videoLifecycleCallbacks = videLifecycle
+            priceView = contentContainer.getChild(NativeAdsContentContainer.ChildType.Price)?.apply {
+                setText(this, nativeAd.price)
             }
-
-            override fun isVideo(): Boolean {
-                return true
+            callToActionView = contentContainer.getChild(NativeAdsContentContainer.ChildType.Action)?.apply {
+                setText(this, nativeAd.callToAction)
             }
-
-            override fun getView(): View {
-                mediaView.setMediaContent(mediaContent)
-                return mediaView
+            bodyView = contentContainer.getChild(NativeAdsContentContainer.ChildType.Description)?.apply {
+                setText(this, nativeAd.body)
             }
-
-            override fun setMute(mute: Boolean) {
-                mediaContent.videoController.mute(mute)
+            storeView = contentContainer.getChild(NativeAdsContentContainer.ChildType.Store)?.apply {
+                setText(this, nativeAd.store)
             }
-
-            override fun setLoop(loop: Boolean) {
-                isLoop = loop
+            iconView = contentContainer.getChild(NativeAdsContentContainer.ChildType.AppIcon)?.apply {
+                visibility = if (null == nativeAd.icon?.drawable) {
+                    View.INVISIBLE
+                } else {
+                    (this as? ImageView)?.setImageDrawable(nativeAd.icon!!.drawable)
+                    View.VISIBLE
+                }
             }
-
-            override fun setVideoLifecycle(lifecycle: INativeAdMediaView.VideoLifecycle?) {
-                super.setVideoLifecycle(lifecycle)
-                customLifecycle = lifecycle
+            advertiserView = contentContainer.getChild(NativeAdsContentContainer.ChildType.Advertiser)?.apply {
+                setText(this, nativeAd.advertiser)
             }
+            setNativeAd(nativeAd)
         }
     }
 
-    override fun detach(context: Context) {
+    private fun setText(view: View, text: String?) {
+        if (TextUtils.isEmpty(text)) {
+            view.visibility = View.INVISIBLE
+        } else {
+            view.visibility = View.VISIBLE
+            (view as? TextView)?.text = text
+        }
+    }
+
+    private fun addMediaView(contentContainer: NativeAdsContentContainer): MediaView {
+        val mediaContainer = contentContainer.getChild(NativeAdsContentContainer.ChildType.Media) as? ViewGroup
+            ?: throw Exception("not found Media Container, you must set a ViewGroup as media container")
+        val mediaView = MediaView(contentContainer.context)
+        mediaContainer.addView(mediaView)
+        return mediaView
+    }
+
+    override fun detach(container: ViewGroup) {
         nativeAd?.destroy()
     }
 }
