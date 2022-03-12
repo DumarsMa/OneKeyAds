@@ -103,7 +103,6 @@ class AdMobNativeAds: INativeAd() {
     private fun renderNativeAd(nativeAd: NativeAd,
                                container: ViewGroup,
                                contentContainer: NativeAdsContentContainer) {
-        Log.e("mbgtest ${hashCode()}", "renderNativeAd, ${container.childCount}", Throwable())
         (nativeAdView?.parent as? ViewGroup)?.removeView(nativeAdView)
         (contentContainer.parent as? ViewGroup)?.removeView(contentContainer)
         nativeAdView = NativeAdView(container.context).apply {
