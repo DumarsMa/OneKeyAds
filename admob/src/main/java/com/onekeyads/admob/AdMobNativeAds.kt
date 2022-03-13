@@ -1,5 +1,6 @@
 package com.onekeyads.admob
 
+import android.app.Activity
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
@@ -20,6 +21,8 @@ class AdMobNativeAds: INativeAd() {
 
     private var nativeAd: NativeAd? = null
     private var nativeAdView: NativeAdView? = null
+    private var adLoader: AdLoader? = null
+    private var nativeAdOption: NativeAdOption? = null
 
     override fun loadNativeAd(
         container: ViewGroup,
@@ -28,11 +31,18 @@ class AdMobNativeAds: INativeAd() {
         nativeAdOption: NativeAdOption,
         callBack: (Boolean) -> Unit
     ) {
+        Log.i(TAG, "load ad start ${nativeAdOption.renderDirect}")
         if (null != nativeAd) {
+            Log.i(TAG, "load ad hasLoad")
             if (nativeAdOption.renderDirect) {
                 renderNativeAd(nativeAd!!, container, contentContainer)
             }
             callBack.invoke(true)
+            return
+        }
+        this.nativeAdOption = nativeAdOption
+        if (adLoader?.isLoading == true) {
+            Log.i(TAG, "load ad loading")
             return
         }
         val adOption = NativeAdOptions.Builder()
@@ -42,10 +52,13 @@ class AdMobNativeAds: INativeAd() {
                 .build())
             .setMediaAspectRatio(nativeAdOption.mediaAspectRatio.ordinal)
             .build()
-        val adLoader = AdLoader.Builder(container.context, adId)
+        adLoader = AdLoader.Builder(container.context, adId)
             .forNativeAd { nativeAd ->
+                if (container.context is Activity && !isActivityValid(container.context as Activity)) {
+                    return@forNativeAd
+                }
                 this.nativeAd = nativeAd
-                if (nativeAdOption.renderDirect) {
+                if (this.nativeAdOption?.renderDirect != false) {
                     renderNativeAd(nativeAd, container, contentContainer)
                 }
                 callBack.invoke(true)
@@ -54,11 +67,12 @@ class AdMobNativeAds: INativeAd() {
             .withNativeAdOptions(
                 adOption
             )
-            .build()
-        adLoader.loadAd(
-            AdRequest.Builder()
-                .build()
-        )
+            .build().apply {
+                loadAd(
+                    AdRequest.Builder()
+                        .build()
+                )
+            }
     }
 
     private fun createAdListener(callBack: (Boolean) -> Unit): AdListener {
@@ -160,5 +174,14 @@ class AdMobNativeAds: INativeAd() {
     override fun detach(container: ViewGroup) {
         nativeAd?.destroy()
         nativeAd = null
+    }
+
+    private fun isActivityValid(activity: Activity): Boolean {
+        return when {
+            activity.isFinishing -> {
+                false
+            }
+            else -> !activity.isDestroyed
+        }
     }
 }

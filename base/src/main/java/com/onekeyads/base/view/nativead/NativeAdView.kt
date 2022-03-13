@@ -20,6 +20,7 @@ class NativeAdView @JvmOverloads constructor(
     private var videoLoop: Boolean
     private var choosePosition: Int = 1
     private var mediaAspectRatio: Int = 0
+    private var renderDirect = true
 
     init {
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.NativeAdView)
@@ -30,12 +31,9 @@ class NativeAdView @JvmOverloads constructor(
         choosePosition = typedArray.getInt(R.styleable.NativeAdView_nativeAdChoicesPlacementPosition, 1)
         mediaAspectRatio = typedArray.getInt(R.styleable.NativeAdView_nativeAdMediaAspectRatio, 0)
         releaseAfterDetach = typedArray.getBoolean(R.styleable.NativeAdView_nativeAdReleaseAfterDetach, true)
-        val renderDirect = typedArray.getBoolean(R.styleable.NativeAdView_nativeAdRenderDirect, true)
+        renderDirect = typedArray.getBoolean(R.styleable.NativeAdView_nativeAdRenderDirect, true)
         typedArray.recycle()
         setSubContainer(inflateId)
-        if (!TextUtils.isEmpty(adId) && subContainer != null) {
-            load(renderDirect)
-        }
     }
 
     fun setSubContainer(inflateId: Int) {
@@ -122,7 +120,9 @@ class NativeAdView @JvmOverloads constructor(
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        load()
+        if (!TextUtils.isEmpty(adId) && subContainer != null) {
+            load(renderDirect)
+        }
     }
 
     fun release() {
