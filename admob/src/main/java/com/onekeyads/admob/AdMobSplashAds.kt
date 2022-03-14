@@ -68,7 +68,7 @@ class AdMobSplashAds: ISplashAds() {
             override fun onAdShowedFullScreenContent() {
                 super.onAdShowedFullScreenContent()
                 Log.i(TAG, "onAdShowedFullScreenContent")
-                delayInvokeResult(true, callBack)
+//                delayInvokeResult(true, callBack)
             }
         }
         splashAd.show(activity)
