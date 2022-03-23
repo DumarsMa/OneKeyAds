@@ -66,6 +66,16 @@ abstract class ISplashAds {
     open fun onStop(activity: Activity, callBack: ((Boolean) -> Unit)? = null) {
     }
 
+    protected fun contextValid(): Boolean {
+        val activity = currentActivity ?: return false
+        return when {
+            activity.isFinishing -> {
+                false
+            }
+            else -> !activity.isDestroyed
+        }
+    }
+
     open fun detach(activity: Activity) {
         activity.application.unregisterActivityLifecycleCallbacks(activityCallBacks)
         currentActivity = null

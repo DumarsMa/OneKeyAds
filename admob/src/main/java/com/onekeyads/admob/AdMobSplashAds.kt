@@ -35,6 +35,9 @@ class AdMobSplashAds: ISplashAds() {
                 override fun onAdLoaded(ad: AppOpenAd) {
                     super.onAdLoaded(ad)
                     Log.i(TAG, "onAdLoaded")
+                    if (!contextValid()) {
+                        return
+                    }
                     handler.removeCallbacksAndMessages(null)
                     this@AdMobSplashAds.loadedAd = ad
                     showSplashAd(activity, ad, callBack)
