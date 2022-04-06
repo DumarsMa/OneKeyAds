@@ -167,6 +167,7 @@ class AdMobNativeAds: INativeAd() {
             ?: throw Exception("not found Media Container, you must set a ViewGroup as media container")
         mediaContainer.removeAllViews()
         val mediaView = MediaView(contentContainer.context)
+        mediaView.setImageScaleType(ImageView.ScaleType.CENTER_CROP)
         mediaContainer.addView(mediaView)
         return mediaView
     }
