@@ -33,9 +33,8 @@ android {
 
 dependencies {
     api project(":base")
-    implementation "com.applovin:applovin-sdk:11.3.3"
-}
 
+}
 apply from: '../publish.gradle'
 ext {
     PUBLISH_GROUPID = "io.github.dumarsma"
