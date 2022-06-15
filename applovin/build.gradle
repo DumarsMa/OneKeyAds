@@ -36,8 +36,8 @@ dependencies {
     implementation "com.applovin:applovin-sdk:11.3.3"
 }
 
-//apply from: '../publish.gradle'
-//ext {
-//    PUBLISH_GROUPID = "io.github.dumarsma"
-//    PUBLISH_ARTIFACTID = "applovinads"
-//}
+apply from: '../publish.gradle'
+ext {
+    PUBLISH_GROUPID = "io.github.dumarsma"
+    PUBLISH_ARTIFACTID = "applovinads"
+}
