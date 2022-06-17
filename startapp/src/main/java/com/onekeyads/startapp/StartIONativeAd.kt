@@ -28,6 +28,11 @@ class StartIONativeAd: INativeAd() {
         nativeAdOption: NativeAdOption,
         callBack: (Boolean) -> Unit
     ) {
+        if (contentContainer.parent != null) {
+            (contentContainer.parent as? ViewGroup)?.removeView(contentContainer)
+        }
+        container.addView(contentContainer, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT))
         checkMediaSize(contentContainer) { mediaSize, secondaryImageSize ->
             val startAppNativeAd = StartAppNativeAd(container.context)
             val nativeAdPreferences = NativeAdPreferences()
@@ -46,13 +51,14 @@ class StartIONativeAd: INativeAd() {
                         callBack.invoke(false)
                         return
                     }
+                    Log.i(TAG, "onReceiveAd $ad")
                     showNativeAd(contentContainer, nativeAd)
                     nativeAd.registerViewForInteraction(container)
                     callBack.invoke(true)
                 }
 
                 override fun onFailedToReceiveAd(ad: Ad?) {
-                    Log.i(TAG, "onFailedToReceiveAd")
+                    Log.i(TAG, "onFailedToReceiveAd $ad")
                     callBack.invoke(false)
                 }
             })

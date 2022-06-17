@@ -27,6 +27,9 @@ class NativeAdsContentContainer @JvmOverloads constructor(
         typedArray.recycle()
     }
 
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+    }
     override fun checkLayoutParams(p: ViewGroup.LayoutParams?): Boolean {
         return p is LayoutParams
     }
