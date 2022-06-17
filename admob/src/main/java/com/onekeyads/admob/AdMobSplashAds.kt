@@ -2,6 +2,7 @@ package com.onekeyads.admob
 
 import android.app.Activity
 import android.content.res.Configuration
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -18,7 +19,7 @@ class AdMobSplashAds: ISplashAds() {
     private val handler = Handler(Looper.getMainLooper())
     private var loadedAd: AppOpenAd? = null
 
-    override fun loadSplash(activity: Activity, splashAdsId: String, callBack: (Boolean) -> Unit) {
+    override fun loadSplash(activity: Activity, savedInstanceState: Bundle?, splashAdsId: String, callBack: (Boolean) -> Unit) {
         Log.i(TAG, "start loadSplash")
         delayInvokeResult(false, callBack)
         val orientation = if (activity.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {

@@ -1,6 +1,7 @@
 package com.onekeyads.huawei
 
 import android.app.Activity
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -17,7 +18,7 @@ class HuaweiSplashAds: ISplashAds() {
     private var handler: Handler? = null
     private var splashAds: SplashView? = null
 
-    override fun loadSplash(activity: Activity, splashAdsId: String, callBack: (Boolean) -> Unit) {
+    override fun loadSplash(activity: Activity, savedInstanceState: Bundle?, splashAdsId: String, callBack: (Boolean) -> Unit) {
         delayInvokeFail(callBack)
         splashAds = SplashView(activity).apply {
             activity.addContentView(this, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,

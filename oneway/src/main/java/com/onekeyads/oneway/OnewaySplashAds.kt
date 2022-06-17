@@ -1,6 +1,7 @@
 package com.onekeyads.oneway
 
 import android.app.Activity
+import android.os.Bundle
 import android.util.Log
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -15,7 +16,7 @@ class OnewaySplashAds: ISplashAds() {
 
     private var splashAd: OWSplashAd? = null
 
-    override fun loadSplash(activity: Activity, splashAdsId: String, callBack: (Boolean) -> Unit) {
+    override fun loadSplash(activity: Activity, savedInstanceState: Bundle?, splashAdsId: String, callBack: (Boolean) -> Unit) {
         splashAd = OWSplashAd(activity, splashAdsId, object: OWSplashAdListener {
             override fun onAdReady() {
                 Log.i(TAG, "onAdReady")

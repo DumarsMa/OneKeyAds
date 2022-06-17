@@ -2,6 +2,7 @@ package com.onekeyads.bytedance
 
 import android.app.Activity
 import android.content.Context
+import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +12,7 @@ import com.onekeyads.base.view.splash.ISplashAds
 private const val TAG = "SplashAds"
 class SplashAds: ISplashAds() {
 
-    override fun loadSplash(activity: Activity, splashAdsId: String, callBack: (Boolean) -> Unit) {
+    override fun loadSplash(activity: Activity, savedInstanceState: Bundle?, splashAdsId: String, callBack: (Boolean) -> Unit) {
         TTAdSdk.getAdManager().createAdNative(activity)
             .loadSplashAd(createAdSlot(activity, splashAdsId), object: TTAdNative.SplashAdListener {
                 override fun onError(code: Int, msg: String?) {

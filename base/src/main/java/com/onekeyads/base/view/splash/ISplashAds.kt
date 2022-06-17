@@ -44,7 +44,7 @@ abstract class ISplashAds {
     private var currentActivity: Activity? = null
     private var currentCallback: ((Boolean) -> Unit)? = null
 
-    final fun attach(activity: Activity, splashAdsId: String, callBack: (Boolean) -> Unit) {
+    final fun attach(activity: Activity, savedInstanceState: Bundle?, splashAdsId: String, callBack: (Boolean) -> Unit) {
         AdsFactory.init(activity.applicationContext) { success ->
             if (!success) {
                 callBack.invoke(false)
@@ -53,12 +53,12 @@ abstract class ISplashAds {
                 activity.application.unregisterActivityLifecycleCallbacks(activityCallBacks)
                 activity.application.registerActivityLifecycleCallbacks(activityCallBacks)
                 currentCallback = callBack
-                loadSplash(activity, splashAdsId, callBack)
+                loadSplash(activity, savedInstanceState, splashAdsId, callBack)
             }
         }
     }
 
-    protected abstract fun loadSplash(activity: Activity, splashAdsId: String, callBack: (Boolean) -> Unit)
+    protected abstract fun loadSplash(activity: Activity, savedInstanceState: Bundle?, splashAdsId: String, callBack: (Boolean) -> Unit)
 
     open fun onStart(activity: Activity, callBack: ((Boolean) -> Unit)? = null) {
     }

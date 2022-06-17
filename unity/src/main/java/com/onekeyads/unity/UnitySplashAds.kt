@@ -1,6 +1,7 @@
 package com.onekeyads.unity
 
 import android.app.Activity
+import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import com.onekeyads.base.AdsFactory
@@ -13,7 +14,7 @@ import com.unity3d.ads.UnityAdsShowOptions
 private const val TAG = "UnityInterstitialAds"
 class UnitySplashAds: ISplashAds() {
 
-    override fun loadSplash(activity: Activity, splashAdsId: String, callBack: (Boolean) -> Unit) {
+    override fun loadSplash(activity: Activity, savedInstanceState: Bundle?, splashAdsId: String, callBack: (Boolean) -> Unit) {
         UnityAds.load(splashAdsId, object: IUnityAdsLoadListener {
             override fun onUnityAdsAdLoaded(placement: String?) {
                 Log.i(TAG, "onUnityAdsAdLoaded->$placement")
