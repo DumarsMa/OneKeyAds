@@ -153,7 +153,6 @@ class StartIONativeAd: INativeAd() {
                         )
                     }
                     is ImageView -> {
-                        mediaContainer.scaleType = ImageView.ScaleType.CENTER_CROP
                         mediaContainer.setImageBitmap(bitmap)
                     }
                     else -> {
