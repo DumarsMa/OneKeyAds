@@ -12,3 +12,4 @@ LineNumberTable, *Annotation*, EnclosingMethod
 -dontwarn com.startapp.**
 
 -dontwarn org.jetbrains.annotations.**
+-keepnames class com.onekeyads.factory.AdsFactoryImpl
