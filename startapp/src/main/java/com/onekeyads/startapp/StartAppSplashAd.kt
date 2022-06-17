@@ -27,7 +27,7 @@ class StartAppSplashAd: ISplashAds() {
         timeoutCallback = Runnable {
             callBack.invoke(false)
         }
-        handler.postDelayed(timeoutCallback!!, 5000)
+        handler.postDelayed(timeoutCallback!!, 3000)
         Log.i(TAG, "loadSplash")
         StartAppAd.showSplash(activity, savedInstanceState, splashConfig, AdPreferences()) {
             if (!contextValid()) {
@@ -39,9 +39,9 @@ class StartAppSplashAd: ISplashAds() {
         }
     }
 
-    override fun onStop(activity: Activity, callBack: ((Boolean) -> Unit)?) {
-        super.onStop(activity, callBack)
-        Log.i(TAG, "onStop")
+    override fun onPause(activity: Activity, callBack: ((Boolean) -> Unit)?) {
+        super.onPause(activity, callBack)
+        Log.i(TAG, "onPause")
         timeoutCallback?.apply {
             handler.removeCallbacks(this)
         }

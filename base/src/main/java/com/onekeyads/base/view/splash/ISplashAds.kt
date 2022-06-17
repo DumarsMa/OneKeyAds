@@ -3,6 +3,7 @@ package com.onekeyads.base.view.splash
 import android.app.Activity
 import android.app.Application
 import android.os.Bundle
+import android.util.Log
 import com.onekeyads.base.AdsFactory
 
 /**
@@ -21,9 +22,15 @@ abstract class ISplashAds {
         }
 
         override fun onActivityResumed(activity: Activity) {
+            if (activity == currentActivity) {
+                onResume(activity, currentCallback)
+            }
         }
 
         override fun onActivityPaused(activity: Activity) {
+            if (activity == currentActivity) {
+                onPause(activity, currentCallback)
+            }
         }
 
         override fun onActivityStopped(activity: Activity) {
@@ -61,6 +68,12 @@ abstract class ISplashAds {
     protected abstract fun loadSplash(activity: Activity, savedInstanceState: Bundle?, splashAdsId: String, callBack: (Boolean) -> Unit)
 
     open fun onStart(activity: Activity, callBack: ((Boolean) -> Unit)? = null) {
+    }
+
+    open fun onResume(activity: Activity, callBack: ((Boolean) -> Unit)? = null) {
+    }
+
+    open fun onPause(activity: Activity, callBack: ((Boolean) -> Unit)? = null) {
     }
 
     open fun onStop(activity: Activity, callBack: ((Boolean) -> Unit)? = null) {
