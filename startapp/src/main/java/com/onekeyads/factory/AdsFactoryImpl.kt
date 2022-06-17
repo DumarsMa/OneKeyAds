@@ -13,7 +13,7 @@ import com.onekeyads.startapp.StartAppRewardAd
 import com.onekeyads.startapp.StartAppSplashAd
 import com.startapp.sdk.adsbase.StartAppSDK
 
-object AdsFactoryImpl: IAdsFactory {
+class AdsFactoryImpl: IAdsFactory {
 
     override fun setConfig(config: AdsConfig) {
         super.setConfig(config)
@@ -21,6 +21,7 @@ object AdsFactoryImpl: IAdsFactory {
     }
 
     override fun init(context: Context, callback: (Boolean) -> Unit) {
+        callback.invoke(true)
     }
 
     override fun createBannerView(): IBannerView {

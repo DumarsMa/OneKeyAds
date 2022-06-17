@@ -9,7 +9,7 @@ class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
-        AdsFactory.createSplashAds().attach(this, AdsConstant.SplashAdsId) {
+        AdsFactory.createSplashAds().attach(this, savedInstanceState,  AdsConstant.SplashAdsId) {
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
