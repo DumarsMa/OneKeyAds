@@ -15,6 +15,8 @@ class StartAppSplashAd: ISplashAds() {
 
     private val handler = Handler(Looper.getMainLooper())
     private var timeoutCallback: Runnable? = null
+    private var splashResult: Boolean? = null
+    private var isActivityResumed: Boolean = false
     override fun loadSplash(activity: Activity, savedInstanceState: Bundle?,
                             splashAdsId: String, callBack: (Boolean) -> Unit) {
         val splashConfig = SplashConfig()
@@ -34,16 +36,29 @@ class StartAppSplashAd: ISplashAds() {
                 Log.i(TAG, "showSplash complete but activity invalid")
                 return@showSplash
             }
-            Log.i(TAG, "showSplash complete")
-            callBack.invoke(true)
+            Log.i(TAG, "showSplash complete $isActivityResumed")
+            splashResult = true
+            if (isActivityResumed) {
+                callBack.invoke(true)
+            }
         }
     }
 
     override fun onPause(activity: Activity, callBack: ((Boolean) -> Unit)?) {
         super.onPause(activity, callBack)
+        isActivityResumed = false
         Log.i(TAG, "onPause")
         timeoutCallback?.apply {
             handler.removeCallbacks(this)
+        }
+    }
+
+    override fun onResume(activity: Activity, callBack: ((Boolean) -> Unit)?) {
+        super.onResume(activity, callBack)
+        Log.i(TAG, "onResume $splashResult")
+        isActivityResumed = true
+        splashResult?.apply {
+            callBack?.invoke(this)
         }
     }
 
